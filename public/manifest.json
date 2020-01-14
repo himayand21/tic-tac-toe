@@ -1,0 +1,8 @@
+{
+  "name": "tic-tac-toe",
+  "short_name": "tic-tac-toe",
+  "display": "standalone",
+  "start_url": "localhost:8080",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
