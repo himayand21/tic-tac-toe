@@ -10,9 +10,14 @@ const winningCombinations = [
 ]
 
 export const getWinner = (boxes, turn) => {
+	let winningCombination;
 	const winnerCheck = winningCombinations.some((combination) => {
-		return combination.every((boxId) => boxes[boxId] === turn);
+		const winFlag = combination.every((boxId) => boxes[boxId] === turn);
+		if (winFlag) {
+			winningCombination = combination;
+		}
+		return winFlag;
 	});
-	if (winnerCheck) return turn;
+	if (winnerCheck) return winningCombination;
 	return null;
 }

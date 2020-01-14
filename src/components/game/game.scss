@@ -1,0 +1,100 @@
+.game-section {
+    width: 300px;
+    .score-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        .player-name {
+            font-weight: bold;
+            width: calc(50% - 30px);
+            display: flex;
+            align-items: center;
+            i {
+                color: green;
+                font-size: 10px;
+                margin: 0 5px;
+            }
+            &:last-child {
+                justify-content: flex-end;
+            }
+        }
+        .score-wrapper {
+            padding: 5px;
+            background-color: lightgray;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-around;
+            width: 60px;
+            box-sizing: border-box;
+            .player-score {
+                font-weight: bold;
+            }
+            .score-separator {
+                margin: 0 5px;
+                font-weight: bold;
+            }
+        }
+    }
+    .box-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        button {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &:hover {
+                cursor: pointer;
+            }
+            &:focus {
+                outline: none;
+            }
+            &:disabled {
+                cursor: not-allowed;
+            }
+            &.box-block-green {
+                i {
+                    color: lightgreen;
+                }
+            }
+        }
+        .box-block-2, .box-block-8 {
+            border-left: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+        .box-block-4, .box-block-6 {
+            border-top: 1px solid lightgray;
+            border-bottom: 1px solid lightgray;
+        }
+        .box-block-5 {
+            border: 1px solid lightgray;
+        }
+    }
+    .button-wrapper {
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        button {
+            padding: 10px 20px;
+            background-color: rgb(105, 0, 105);;
+            box-shadow: none;
+            border: none;
+            border-radius: 5px;
+            color: white !important;
+            transition: background-color 0.3s ease-in-out;
+            &:hover {
+                background-color: rgb(88, 0, 88);
+                cursor: pointer;
+            }
+            &:disabled {
+                opacity: 0.3;
+                cursor: not-allowed;
+            }
+        }
+    }
+}

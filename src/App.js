@@ -7,6 +7,23 @@ import { Game } from "./components/game";
 
 import { getWinner } from "./utils/getWinner";
 
+const initBoxes = {
+  1: "",
+  2: "",
+  3: "",
+  4: "",
+  5: "",
+  6: "",
+  7: "",
+  8: "",
+  9: ""
+};
+
+const initResult = {
+  winningCombination: [],
+  status: ""
+};
+
 class App extends Component {
   state = {
     player1: {
@@ -19,19 +36,10 @@ class App extends Component {
       score: 0,
       choice: "o"
     },
-    nextTurn: "",
-    boxes: {
-      1: "",
-      2: "",
-      3: "",
-      4: "",
-      5: "",
-      6: "",
-      7: "",
-      8: "",
-      9: ""
-    },
-    stage: "players"
+    nextTurn: "player1",
+    boxes: initBoxes,
+    stage: "players",
+    result: initResult
   };
 
   handleNameChange = event => {
@@ -81,22 +89,33 @@ class App extends Component {
       ...boxes,
       [boxid]: nextTurn
     };
-    const winner = getWinner(newBoxes, nextTurn);
-    if (winner) {
+    this.setState({ boxes: newBoxes });
+    const winningCombination = getWinner(newBoxes, nextTurn);
+    if (winningCombination) {
       const winnerDetails = this.state[nextTurn];
       this.setState({
-        boxes: newBoxes,
-        stage: 'congrats',
         [nextTurn]: {
           ...winnerDetails,
           score: winnerDetails.score + 1
+        },
+        result: {
+          winningCombination,
+          status: "win"
         }
       });
     } else {
-      this.setState({
-        boxes: newBoxes,
-        nextTurn: nextTurn === "player1" ? "player2" : "player1"
-      });
+      if (Object.values(newBoxes).every(boxVal => boxVal)) {
+        this.setState({
+          result: {
+            winningCombination: [],
+            status: "tie"
+          }
+        })
+      } else {
+        this.setState({
+          nextTurn: nextTurn === "player1" ? "player2" : "player1"
+        });
+      }
     }
   };
 
@@ -106,9 +125,58 @@ class App extends Component {
     this.setState({ stage });
   };
 
+  rematch = () => {
+    const { player1, player2 } = this.state;
+    const xChoice = player1.choice === "x";
+    this.setState({
+      player1: {
+        ...player1,
+        choice: xChoice ? "o" : "x"
+      },
+      player2: {
+        ...player2,
+        choice: xChoice ? "x" : "o"
+      },
+      nextTurn: xChoice ? "player2" : "player1",
+      boxes: initBoxes,
+      result: initResult
+    });
+  }
+
+  endGame = () => {
+    this.setState({
+      stage: "score"
+    });
+  }
+
+  restart = () => {
+    this.setState({
+      player1: {
+        name: "",
+        score: 0,
+        choice: "x"
+      },
+      player2: {
+        name: "",
+        score: 0,
+        choice: "o"
+      },
+      nextTurn: "player1",
+      boxes: initBoxes,
+      stage: "players",
+      result: initResult
+    });
+  }
+
   renderContent = () => {
-    const { stage, player1, player2 } = this.state;
-    const players = {player1, player2};
+    const {
+      stage,
+      player1,
+      player2,
+      nextTurn,
+      result
+    } = this.state;
+    const players = { player1, player2 };
     switch (stage) {
       case "players": {
         return (
@@ -134,6 +202,9 @@ class App extends Component {
             boxes={this.state.boxes}
             handleBoxClick={this.handleBoxClick}
             players={players}
+            nextTurn={nextTurn}
+            result={result}
+            rematch={this.rematch}
           />
         );
       }
