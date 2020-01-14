@@ -5,6 +5,8 @@ import { Players } from "./components/Players";
 import { Choice } from "./components/Choice";
 import { Game } from "./components/Game";
 
+import {getWinner} from "./utils/getWinner";
+
 class App extends Component {
   state = {
     player1: {
@@ -17,12 +19,23 @@ class App extends Component {
       score: 0,
       choice: ""
     },
+    nextTurn: "",
+    boxes: {
+      1: "",
+      2: "",
+      3: "",
+      4: "",
+      5: "",
+      6: "",
+      7: "",
+      8: "",
+      9: ""
+    },
     stage: "players"
   };
 
   handleNameChange = event => {
-    const { target } = event;
-    const { value, dataset } = target;
+    const { value, dataset } = event.target;
     const { playerid } = dataset;
 
     const inputValue = value;
@@ -36,16 +49,42 @@ class App extends Component {
   };
 
   handleChoice = event => {
-    const { target } = event;
-    const { dataset } = target;
-    const { choice } = dataset;
-    const { player1 } = this.state;
+    const { dataset } = event.target;
+    const { choice, playerid } = dataset;
+
+	const otherPlayerId = playerid === "player1" ? "player2" : "player1";
+
+	const {
+		[playerid]: playerDetails,
+		[otherPlayerId]: otherPlayerDetails
+	} = this.state;
+    const xChoice = choice === "x";
+
     this.setState({
-      player1: {
-        ...player1,
+      [playerid]: {
+        ...playerDetails,
         choice
       },
-	  stage: "game"
+      [otherPlayerId]: {
+        ...otherPlayerDetails,
+        choice: xChoice ? "o" : "x"
+      },
+      nextTurn: xChoice ? playerid : otherPlayerId
+    });
+  };
+
+  handleBoxClick = event => {
+    const { dataset } = event.target;
+    const { boxid } = dataset;
+    const { nextTurn, boxes } = this.state;
+	const winner = getWinner(boxes, nextTurn);
+	console.log(winner);
+    this.setState({
+      boxes: {
+        ...boxes,
+        [boxid]: nextTurn
+      },
+      nextTurn: nextTurn === "player1" ? "player2" : "player1"
     });
   };
 
@@ -68,11 +107,22 @@ class App extends Component {
         );
       }
       case "choice": {
-        return <Choice handleChoice={this.handleChoice}/>;
+        return (
+			<Choice
+				handleChoice={this.handleChoice}
+				updateStage={this.updateStage}
+			/>
+		);
       }
-	  case "game": {
-		  return <Game />
-	  }
+      case "game": {
+        return (
+          <Game
+		  	boxes={this.state.boxes}
+			handleBoxClick={this.handleBoxClick}
+			players={{ player1, player2 }}
+		/>
+        );
+      }
     }
   };
 
