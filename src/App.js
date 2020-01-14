@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 
 import "./App.scss";
-import { Players } from "./components/Players";
-import { Choice } from "./components/Choice";
-import { Game } from "./components/Game";
+import { Players } from "./components/players";
+import { Choice } from "./components/choice";
+import { Game } from "./components/game";
 
-import {getWinner} from "./utils/getWinner";
+import { getWinner } from "./utils/getWinner";
 
 class App extends Component {
   state = {
     player1: {
       name: "",
       score: 0,
-      choice: ""
+      choice: "x"
     },
     player2: {
       name: "",
       score: 0,
-      choice: ""
+      choice: "o"
     },
     nextTurn: "",
     boxes: {
@@ -52,12 +52,12 @@ class App extends Component {
     const { dataset } = event.target;
     const { choice, playerid } = dataset;
 
-	const otherPlayerId = playerid === "player1" ? "player2" : "player1";
+    const otherPlayerId = playerid === "player1" ? "player2" : "player1";
 
-	const {
-		[playerid]: playerDetails,
-		[otherPlayerId]: otherPlayerDetails
-	} = this.state;
+    const {
+      [playerid]: playerDetails,
+      [otherPlayerId]: otherPlayerDetails
+    } = this.state;
     const xChoice = choice === "x";
 
     this.setState({
@@ -77,15 +77,27 @@ class App extends Component {
     const { dataset } = event.target;
     const { boxid } = dataset;
     const { nextTurn, boxes } = this.state;
-	const winner = getWinner(boxes, nextTurn);
-	console.log(winner);
-    this.setState({
-      boxes: {
-        ...boxes,
-        [boxid]: nextTurn
-      },
-      nextTurn: nextTurn === "player1" ? "player2" : "player1"
-    });
+    const newBoxes = {
+      ...boxes,
+      [boxid]: nextTurn
+    };
+    const winner = getWinner(newBoxes, nextTurn);
+    if (winner) {
+      const winnerDetails = this.state[nextTurn];
+      this.setState({
+        boxes: newBoxes,
+        stage: 'congrats',
+        [nextTurn]: {
+          ...winnerDetails,
+          score: winnerDetails.score + 1
+        }
+      });
+    } else {
+      this.setState({
+        boxes: newBoxes,
+        nextTurn: nextTurn === "player1" ? "player2" : "player1"
+      });
+    }
   };
 
   updateStage = event => {
@@ -96,11 +108,12 @@ class App extends Component {
 
   renderContent = () => {
     const { stage, player1, player2 } = this.state;
+    const players = {player1, player2};
     switch (stage) {
       case "players": {
         return (
           <Players
-            players={{ player1, player2 }}
+            players={players}
             updateStage={this.updateStage}
             handleChange={this.handleNameChange}
           />
@@ -108,26 +121,31 @@ class App extends Component {
       }
       case "choice": {
         return (
-			<Choice
-				handleChoice={this.handleChoice}
-				updateStage={this.updateStage}
-			/>
-		);
+          <Choice
+            handleChoice={this.handleChoice}
+            updateStage={this.updateStage}
+            players={players}
+          />
+        );
       }
       case "game": {
         return (
           <Game
-		  	boxes={this.state.boxes}
-			handleBoxClick={this.handleBoxClick}
-			players={{ player1, player2 }}
-		/>
+            boxes={this.state.boxes}
+            handleBoxClick={this.handleBoxClick}
+            players={players}
+          />
         );
       }
     }
   };
 
   render() {
-    return <div>{this.renderContent()}</div>;
+    return (
+      <div className="app-block">
+        {this.renderContent()}
+      </div>
+    );
   }
 }
 

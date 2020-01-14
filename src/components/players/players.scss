@@ -1,0 +1,41 @@
+.player-entry {
+    button {
+        background-color: purple;
+        box-shadow: none;
+        border: none;
+        width: 100%;
+        color: white !important;
+        box-sizing: border-box;
+        padding: 10px 0;
+        margin-top: 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease-in-out;
+        &:hover {
+            background-color: rgb(88, 0, 88);
+            cursor: pointer;
+        }
+    }
+    input {
+        box-sizing: border-box;
+        width: 100%;
+        border-width: 0 0 1px 0;
+        border-bottom-color: lightgray;
+        transition: border-bottom-color 0.3s ease-in-out;
+        font-size: 16px;
+        padding: 5px 0;
+        &:focus {
+            outline: none;
+            border-bottom-color: purple;
+        }
+    }
+    .player-block {
+        margin: 40px 0;
+        .player-name {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    }
+    h1 {
+        margin-bottom: 50px;
+    }
+}
