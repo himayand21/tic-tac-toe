@@ -1,17 +1,21 @@
 import React from "react";
 
+import './players.scss';
+
 export const Players = props => {
   const { players, handleChange, updateStage } = props;
   return (
-    <div>
+    <section className="player-entry">
+      <h1>Tic-tac-toe</h1>
       {Object.entries(players).map(([playerID, playerDetails], index) => {
         return (
           <div className="player-block" key={`player${index}`}>
-            <div className="player-name">{`Enter Player ${index + 1} -`}</div>
+            <div className="player-name">{`Player ${index + 1} -`}</div>
             <input
               data-playerid={playerID}
               onChange={handleChange}
               value={playerDetails.name}
+              placeholder="enter player name"
             />
           </div>
         );
@@ -19,6 +23,6 @@ export const Players = props => {
       <button data-stage="choice" onClick={updateStage}>
         Next
       </button>
-    </div>
+    </section>
   );
 };

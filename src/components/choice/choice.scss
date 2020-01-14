@@ -1,0 +1,64 @@
+.choice-wrapper {
+    width: 200px;
+    h1 {
+        margin-bottom: 50px;
+    }
+    .player-name {
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    .choice-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 50px;
+        margin-top: 20px;
+        .option-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            .option-button {
+                width: 20px;
+                height: 20px;
+                border: 1px solid purple;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: visible;
+                &:focus {
+                    outline: none;
+                }
+                .option-filled {
+                    min-height: 12px;
+                    min-width: 12px;
+                    background-color: purple;
+                    border-radius: 50%;
+                }
+            }
+            .option-icon {
+                margin-bottom: 15px;
+                i {
+                    font-size: 42px;
+                }
+            }
+        }
+    }
+    .next-button {
+        background-color: purple;
+        box-shadow: none;
+        border: none;
+        width: 100%;        
+        color: white !important;
+        box-sizing: border-box;
+        padding: 10px 0;
+        margin-top: 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease-in-out;
+        &:hover {
+            background-color: rgb(88, 0, 88);
+            cursor: pointer;
+        }
+    }
+}
