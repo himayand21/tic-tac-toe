@@ -20,7 +20,11 @@ export const Players = props => {
           </div>
         );
       })}
-      <button data-stage="choice" onClick={updateStage}>
+      <button
+        data-stage="choice"
+        onClick={updateStage}
+        disabled={Object.values(players).some(player => !player.name)}
+      >
         Next
       </button>
     </section>

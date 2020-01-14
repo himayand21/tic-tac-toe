@@ -1,6 +1,6 @@
 .player-entry {
     button {
-        background-color: purple;
+        background-color: rgb(105, 0, 105);
         box-shadow: none;
         border: none;
         width: 100%;
@@ -14,6 +14,9 @@
             background-color: rgb(88, 0, 88);
             cursor: pointer;
         }
+        &:disabled {
+            opacity: 0.3;
+        }
     }
     input {
         box-sizing: border-box;
@@ -25,7 +28,7 @@
         padding: 5px 0;
         &:focus {
             outline: none;
-            border-bottom-color: purple;
+            border-bottom-color: rgb(105, 0, 105);
         }
     }
     .player-block {

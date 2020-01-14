@@ -18,32 +18,35 @@ const options = [
 export const Choice = props => {
   const { handleChoice, updateStage, players } = props;
   return (
-    <section className="choice-wrapper">
+    <section className="choice-section">
       <h1>Pick your side</h1>
       {Object.entries(players).map(([playerId, playerDetails]) => {
         const { name, choice } = playerDetails;
-        return ([
-          <div className="player-name">{`${name} -`}</div>,
-          <div className="choice-details">
-            {options.map(option => {
-              return (
-                <div className="option-wrapper">
-                  <div className="option-icon">
-                    {option.label}
+        return (
+          <div className="choice-wrapper">
+            <div className="player-name">{`${name} -`}</div>
+            <div className="choice-details">
+              {options.map(option => {
+                return (
+                  <div className="option-wrapper">
+                    <div className="option-icon">
+                      {option.label}
+                    </div>
+                    <button
+                      data-choice={option.value}
+                      data-playerid={playerId}
+                      onClick={handleChoice}
+                      className="option-button"
+                      disabled={choice === option.value}
+                    >
+                      {choice === option.value ? <div className="option-filled" /> : null}
+                    </button>
                   </div>
-                  <button
-                    data-choice={option.value}
-                    data-playerid={playerId}
-                    onClick={handleChoice}
-                    className="option-button"
-                  >
-                    {choice === option.value ? <div className="option-filled" /> : null}
-                  </button>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        ])
+        )
       })}
       <button
         className="next-button"
