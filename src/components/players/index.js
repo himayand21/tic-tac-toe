@@ -3,7 +3,13 @@ import React from "react";
 import './players.scss';
 
 export const Players = props => {
-  const { players, handleChange, updateStage } = props;
+  const {
+    players,
+    handleChange,
+    updateStage,
+    aiFlag,
+    toggleAI
+  } = props;
   return (
     <section className="player-entry">
       <h1>Tic-tac-toe</h1>
@@ -20,8 +26,18 @@ export const Players = props => {
           </div>
         );
       })}
+      <div className="option-button-wrapper">
+        <button
+          className="option-button"
+          onClick={toggleAI}
+        >
+          {aiFlag ? <div className="option-filled" /> : null}
+        </button>
+        <span>Use AI</span>
+      </div>
       <button
         data-stage="choice"
+        className="choice-button"
         onClick={updateStage}
         disabled={Object.values(players).some(player => !player.name)}
       >

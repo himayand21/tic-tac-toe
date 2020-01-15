@@ -1,5 +1,5 @@
 .player-entry {
-    button {
+    .choice-button {
         background-color: rgb(105, 0, 105);
         box-shadow: none;
         border: none;
@@ -16,6 +16,18 @@
         }
         &:disabled {
             opacity: 0.3;
+        }
+    }
+    .option-button-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 15px;
+        span {
+            font-weight: bold;
+            margin-left: 10px;
+            font-size: 17px;
         }
     }
     input {

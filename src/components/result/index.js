@@ -5,17 +5,25 @@ import { Score } from "../score";
 
 import './result.scss';
 
+const getHeading = (winnerName, aiFlag) => {
+    if (aiFlag && winnerName === "AI") return 'You lose !';
+    if (!winnerName) return `It's a tie !`;
+    return `Congratulations, ${winnerName}`;
+}
+
 export const Result = (props) => {
     const {
         player1,
         player2,
-        restart
+        restart,
+        aiFlag
     } = props;
 
     const winnerName = getWinnerName(player1, player2);
+    const heading = getHeading(winnerName, aiFlag);
     return (
         <section className="result-section">
-            <h1>{winnerName ? `Congratulations, ${winnerName} !` : `It's a tie !`}</h1>
+            <h1>{heading}</h1>
             <div className="final-score-wrapper">
                 <Score
                     player1={player1}

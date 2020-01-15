@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Circle } from '../circle';
 import { Cross } from '../cross';
 import { Score } from '../score';
 
 import './game.scss';
+import { getAIMove } from '../../utils/getAIMove';
 
 const boxCells = {
 	x: <Cross />,
@@ -17,31 +18,38 @@ export const Game = (props) => {
 		handleBoxClick,
 		rematch,
 		players,
-		nextTurn,
+		currentTurn,
 		result,
-		endGame
+		endGame,
+		aiFlag
 	} = props;
 	const {
 		player1,
 		player2
 	} = players;
+
+	useEffect(() => {
+		if (currentTurn === "player2" && aiFlag) {
+			const boxId = getAIMove(boxes);
+			handleBoxClick(boxId);
+		}
+	}, [currentTurn]);
 	return (
 		<section className="game-section">
 			<Score
 				player1={player1}
 				player2={player2}
-				nextTurn={nextTurn}
+				currentTurn={currentTurn}
 			/>
 			<div className="box-wrapper">
-				{Object.entries(boxes).map(([boxID, boxValue]) => {
+				{Object.entries(boxes).map(([boxId, boxValue]) => {
 					const playerDetails = players[boxValue];
-					const winKey = result.winningCombination.includes(parseInt(boxID));
+					const winKey = result.winningCombination.includes(parseInt(boxId));
 					return (
 						<button
-							onClick={handleBoxClick}
-							data-boxid={boxID}
+							onClick={() => handleBoxClick(boxId)}
 							disabled={playerDetails}
-							className={`box-block-${boxID} ${winKey ? 'box-block-green' : ''}`}
+							className={`box-block-${boxId} ${winKey ? 'box-block-green' : ''}`}
 							disabled={result.status || boxValue}
 						>
 							{playerDetails ? boxCells[playerDetails.choice] : ''}

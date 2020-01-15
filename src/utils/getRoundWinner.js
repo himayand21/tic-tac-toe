@@ -9,7 +9,7 @@ const winningCombinations = [
 	[7, 8, 9]
 ]
 
-export const getWinner = (boxes, turn) => {
+export const getRoundWinner = (boxes, turn) => {
 	let winningCombination;
 	const winnerCheck = winningCombinations.some((combination) => {
 		const winFlag = combination.every((boxId) => boxes[boxId] === turn);
