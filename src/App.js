@@ -4,6 +4,7 @@ import "./App.scss";
 import { Players } from "./components/players";
 import { Choice } from "./components/choice";
 import { Game } from "./components/game";
+import { Result } from "./components/result";
 
 import { getWinner } from "./utils/getWinner";
 
@@ -145,7 +146,9 @@ class App extends Component {
 
   endGame = () => {
     this.setState({
-      stage: "score"
+      stage: "result",
+      boxes: initBoxes,
+      result: initResult
     });
   }
 
@@ -205,8 +208,18 @@ class App extends Component {
             nextTurn={nextTurn}
             result={result}
             rematch={this.rematch}
+            endGame={this.endGame}
           />
         );
+      }
+      case "result": {
+        return (
+          <Result
+            player1={player1}
+            player2={player2}
+            restart={this.restart}
+          />
+        )
       }
     }
   };
