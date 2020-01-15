@@ -1,7 +1,8 @@
 import React from 'react';
 
-import {Circle} from '../circle';
-import {Cross} from '../cross';
+import { Circle } from '../circle';
+import { Cross } from '../cross';
+import { Score } from '../score';
 
 import './game.scss';
 
@@ -17,7 +18,8 @@ export const Game = (props) => {
 		rematch,
 		players,
 		nextTurn,
-		result
+		result,
+		endGame
 	} = props;
 	const {
 		player1,
@@ -25,25 +27,11 @@ export const Game = (props) => {
 	} = players;
 	return (
 		<section className="game-section">
-			<div className="score-section">
-				<div className="player-name">
-					<span>{player1.name}</span>
-					{nextTurn === "player1" ? <i className="fas fa-circle" /> : null}
-				</div>
-				<div className="score-wrapper">
-					<div className="player-score">
-						{player1.score}
-					</div>
-					<div className="score-separator">-</div>
-					<div className="player-score">
-						{player2.score}
-					</div>
-				</div>
-				<div className="player-name">
-					{nextTurn === "player2" ? <i className="fas fa-circle" /> : null}
-					<span>{player2.name}</span>
-				</div>
-			</div>
+			<Score
+				player1={player1}
+				player2={player2}
+				nextTurn={nextTurn}
+			/>
 			<div className="box-wrapper">
 				{Object.entries(boxes).map(([boxID, boxValue]) => {
 					const playerDetails = players[boxValue];
@@ -54,7 +42,7 @@ export const Game = (props) => {
 							data-boxid={boxID}
 							disabled={playerDetails}
 							className={`box-block-${boxID} ${winKey ? 'box-block-green' : ''}`}
-							disabled={result.status}
+							disabled={result.status || boxValue}
 						>
 							{playerDetails ? boxCells[playerDetails.choice] : ''}
 						</button>
@@ -71,6 +59,7 @@ export const Game = (props) => {
 				</button>
 				<button
 					className="endgame-button"
+					onClick={endGame}
 				>
 					End Game
 				</button>

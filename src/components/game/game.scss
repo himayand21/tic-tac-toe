@@ -10,6 +10,11 @@
             width: calc(50% - 30px);
             display: flex;
             align-items: center;
+            span {
+                max-width: 100px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
             i {
                 color: green;
                 font-size: 10px;
