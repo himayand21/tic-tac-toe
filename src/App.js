@@ -6,7 +6,7 @@ import { Choice } from "./components/choice";
 import { Game } from "./components/game";
 import { Result } from "./components/result";
 
-import { getWinner } from "./utils/getWinner";
+import { getRoundWinner } from "./utils/getRoundWinner";
 
 const initBoxes = {
   1: "",
@@ -37,10 +37,11 @@ class App extends Component {
       score: 0,
       choice: "o"
     },
-    nextTurn: "player1",
+    currentTurn: "player1",
     boxes: initBoxes,
     stage: "players",
-    result: initResult
+    result: initResult,
+    aiFlag: false
   };
 
   handleNameChange = event => {
@@ -78,24 +79,22 @@ class App extends Component {
         ...otherPlayerDetails,
         choice: xChoice ? "o" : "x"
       },
-      nextTurn: xChoice ? playerid : otherPlayerId
+      currentTurn: xChoice ? playerid : otherPlayerId
     });
   };
 
-  handleBoxClick = event => {
-    const { dataset } = event.target;
-    const { boxid } = dataset;
-    const { nextTurn, boxes } = this.state;
+  handleBoxClick = (boxId) => {
+    const { currentTurn, boxes } = this.state;
     const newBoxes = {
       ...boxes,
-      [boxid]: nextTurn
+      [boxId]: currentTurn
     };
     this.setState({ boxes: newBoxes });
-    const winningCombination = getWinner(newBoxes, nextTurn);
+    const winningCombination = getRoundWinner(newBoxes, currentTurn);
     if (winningCombination) {
-      const winnerDetails = this.state[nextTurn];
+      const winnerDetails = this.state[currentTurn];
       this.setState({
-        [nextTurn]: {
+        [currentTurn]: {
           ...winnerDetails,
           score: winnerDetails.score + 1
         },
@@ -114,7 +113,7 @@ class App extends Component {
         })
       } else {
         this.setState({
-          nextTurn: nextTurn === "player1" ? "player2" : "player1"
+          currentTurn: currentTurn === "player1" ? "player2" : "player1"
         });
       }
     }
@@ -138,7 +137,7 @@ class App extends Component {
         ...player2,
         choice: xChoice ? "x" : "o"
       },
-      nextTurn: xChoice ? "player2" : "player1",
+      currentTurn: xChoice ? "player2" : "player1",
       boxes: initBoxes,
       result: initResult
     });
@@ -164,10 +163,25 @@ class App extends Component {
         score: 0,
         choice: "o"
       },
-      nextTurn: "player1",
+      currentTurn: "player1",
       boxes: initBoxes,
       stage: "players",
-      result: initResult
+      result: initResult,
+      aiFlag: false
+    });
+  }
+
+  toggleAI = () => {
+    const {
+      player2,
+      aiFlag
+    } = this.state;
+    this.setState({
+      player2: {
+        ...player2,
+        name: aiFlag ? "" : "AI"
+      },
+      aiFlag: !aiFlag
     });
   }
 
@@ -176,17 +190,20 @@ class App extends Component {
       stage,
       player1,
       player2,
-      nextTurn,
-      result
+      currentTurn,
+      result,
+      aiFlag
     } = this.state;
     const players = { player1, player2 };
     switch (stage) {
       case "players": {
         return (
           <Players
-            players={players}
+            players={aiFlag ? {player1} : players}
             updateStage={this.updateStage}
             handleChange={this.handleNameChange}
+            aiFlag={aiFlag}
+            toggleAI={this.toggleAI}
           />
         );
       }
@@ -205,10 +222,11 @@ class App extends Component {
             boxes={this.state.boxes}
             handleBoxClick={this.handleBoxClick}
             players={players}
-            nextTurn={nextTurn}
+            currentTurn={currentTurn}
             result={result}
             rematch={this.rematch}
             endGame={this.endGame}
+            aiFlag={aiFlag}
           />
         );
       }
@@ -218,6 +236,7 @@ class App extends Component {
             player1={player1}
             player2={player2}
             restart={this.restart}
+            aiFlag={aiFlag}
           />
         )
       }
